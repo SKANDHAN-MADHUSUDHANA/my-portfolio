@@ -24,3 +24,31 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+@layer utilities {
+  .stroke-light {
+    -webkit-text-stroke: 1px black;
+    color: transparent;
+  }
+
+  .stroke-dark {
+    -webkit-text-stroke: 1px white;
+    color: transparent;
+  }
+
+  .cedarville-cursive-regular {
+  font-family: "Cedarville Cursive", cursive;
+  font-weight: 400;
+  font-style: normal;
+  }
+
+
+  .cascadia-mono-myFont {
+  font-family: "Cascadia Mono", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  }
+
+}
