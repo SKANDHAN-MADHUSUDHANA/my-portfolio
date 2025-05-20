@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useClock } from "@/context/ClockContext";
 
 type DraggingHandType = null | 'hour';
@@ -20,6 +20,19 @@ export default function Clock() {
   const startAngle = useRef(0);
   const previousHour12 = useRef(0);
   const hasInitialized = useRef(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipBgMap: Record<TimeOfDay, string> = {
+  morning: "bg-[#c2b97f]",
+  afternoon: "bg-[#c2b97f]",
+  evening: "bg-[#c2b97f]",
+  night: "bg-[#6c577e]",
+};
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowTooltip(true), 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (hasInitialized.current) return;
@@ -55,6 +68,7 @@ export default function Clock() {
     draggingHand.current = hand;
     startAngle.current = currentAngle;
     previousHour12.current = Math.floor(hourAngle / 30) % 12 || 12;
+    setShowTooltip(false);
   };
 
   const handleMouseMove = (e: MouseEvent) => {
@@ -113,6 +127,21 @@ export default function Clock() {
   }, [hourAngle, isPM]);
 
   return (
+    <>
+      {showTooltip && (
+  <div className="fixed z-[999] left-[10vw] top-[calc(13vh-4.2rem)] w-[15vw] text-center animate-bounce-fade">
+    <div className={`relative ${tooltipBgMap[timeOfDay]} text-black text-xs md:text-sm px-3 py-2 rounded-lg shadow-lg`}>
+      🕰 "Spin the hour hand of the clock to get a peek into how I spend my day."
+      <div
+        className="absolute left-1/2 -bottom-2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent"
+        style={{
+          borderTopColor: timeOfDay === "night" ? "#6c577e" : "#c2b97f",
+        }}
+      ></div>
+    </div>
+  </div>
+)}
+
     <div
       ref={clockRef}
       className={`fixed top-[15vh] left-[10vw] z-50 w-[150vw] max-w-[15vw] aspect-square rounded-full border-[0.7vw] shadow-md flex items-center justify-center
@@ -142,5 +171,6 @@ export default function Clock() {
         }}
       />
     </div>
+    </>
   );
 }
