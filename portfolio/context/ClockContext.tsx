@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useState, useEffect, ReactNode, use } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 export type TimeOfDay = 'morning' | 'afternoon' | 'evening' | 'night';
 
@@ -10,13 +10,15 @@ interface ClockContextType {
   timeOfDay: TimeOfDay;
   displayTime: string;
   initialized: boolean;
-  setClockState: (data: Partial<Omit<ClockContextType, 'initialized' | 'setClockState'>>) => void;
+  manualOverride: boolean;
+  setClockState: (data: Partial<Omit<ClockContextType, 'initialized' | 'setClockState' | 'manualOverride'>>) => void;
+  toggleManualOverride: (timeOfDay?: TimeOfDay) => void;
 }
 
 const ClockContext = createContext<ClockContextType | undefined>(undefined);
 
 export function ClockProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<Omit<ClockContextType, 'initialized' | 'setClockState'>>({
+  const [state, setState] = useState<Omit<ClockContextType, 'initialized' | 'setClockState' | 'manualOverride' | 'toggleManualOverride'>>({
     hourAngle: 0,
     minuteAngle: 0,
     isPM: false,
@@ -25,8 +27,11 @@ export function ClockProvider({ children }: { children: ReactNode }) {
   });
 
   const [initialized, setInitialized] = useState(false);
+  const [manualOverride, setManualOverride] = useState(false);
 
   useEffect(() => {
+    if (manualOverride) return; // Don't update time if manual override is active
+
     const now = new Date();
     const hours = now.getHours();
     const minutes = now.getMinutes();
@@ -41,22 +46,50 @@ export function ClockProvider({ children }: { children: ReactNode }) {
     else if (hours >= 17 && hours < 21) timeOfDay = 'evening';
     else if (hours >= 21 || hours < 5) timeOfDay = 'night';
 
-    setState({
+    setState(prev => ({
+      ...prev,
       hourAngle,
       minuteAngle,
       isPM: hours >= 12,
       displayTime,
       timeOfDay,
-    });
+    }));
     setInitialized(true);
-  }, []);
+  }, [manualOverride]);
 
-  const setClockState = (data: Partial<Omit<ClockContextType, 'initialized' | 'setClockState'>>) => {
+  const setClockState = (data: Partial<Omit<ClockContextType, 'initialized' | 'setClockState' | 'manualOverride' | 'toggleManualOverride'>>) => {
     setState(prev => ({ ...prev, ...data }));
   };
 
+  const toggleManualOverride = (timeOfDay?: TimeOfDay) => {
+    if (timeOfDay) {
+      // Set specific time of day
+      setState(prev => ({
+        ...prev,
+        timeOfDay,
+        isPM: timeOfDay === 'afternoon' || timeOfDay === 'evening' || timeOfDay === 'night'
+      }));
+      setManualOverride(true);
+    } else {
+      // Toggle between morning and night
+      const newTimeOfDay = state.timeOfDay === 'night' ? 'morning' : 'night';
+      setState(prev => ({
+        ...prev,
+        timeOfDay: newTimeOfDay,
+        isPM:  newTimeOfDay === 'night'
+      }));
+      setManualOverride(!manualOverride);
+    }
+  };
+
   return (
-    <ClockContext.Provider value={{ ...state, initialized, setClockState }}>
+    <ClockContext.Provider value={{ 
+      ...state, 
+      initialized, 
+      manualOverride,
+      setClockState, 
+      toggleManualOverride 
+    }}>
       {children}
     </ClockContext.Provider>
   );

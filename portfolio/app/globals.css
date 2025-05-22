@@ -62,3 +62,17 @@ body {
 .animate-bounce-fade {
   animation: bounce-fade 1.2s ease-out;
 }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.cartoon-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+
+.clip-path-tear {
+  clip-path: polygon(0 0, 100% 0, 100% 65%, 75% 80%, 50% 65%, 25% 85%, 0 70%);
+}

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 interface DraggableCardProps {
@@ -20,11 +20,28 @@ export default function DraggableCard({
   y 
 }: DraggableCardProps) {
   const [isDragging, setIsDragging] = useState(false);
-  const [position, setPosition] = useState({ 
-    x , y
-  });
+  const [isMobile, setIsMobile] = useState(false);
+  const [position, setPosition] = useState({ x, y });
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      // Reset position when switching between mobile and desktop
+      setPosition(mobile ? { x: 0, y: 0 } : { x, y });
+    };
+    
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, [x, y]); // Add x and y as dependencies
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    if (isMobile) return;
+    
     setIsDragging(true);
     const startX = e.clientX;
     const startY = e.clientY;
@@ -34,8 +51,8 @@ export default function DraggableCard({
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging) {
         setPosition({
-          x: initialX + e.clientX - startX,
-          y: initialY + e.clientY - startY
+          x: initialX + (e.clientX - startX) / (window.innerWidth / 100),
+          y: initialY + (e.clientY - startY) / (window.innerHeight / 100)
         });
       }
     };
@@ -58,11 +75,17 @@ export default function DraggableCard({
 
   return (
     <div
-      className="absolute cursor-grab bg-white rounded-xl border-2 border-black shadow-md p-5  
-      transition-transform duration-200 hover:-translate-y-1 hover:rotate-1 w-[30vw] group"
-      style={{ transform: `translate(${position.x}vw, ${position.y}vh)` }}
+      className={`${isMobile ? 'static' : 'absolute'} cursor-grab bg-white rounded-xl border-2 border-black shadow-md p-5 transition-transform duration-200 hover:-translate-y-1 hover:rotate-1 w-full md:w-[30vw] group mb-6 md:mb-0`}
+      style={{ 
+        transform: isMobile 
+          ? 'none' 
+          : `translate(${position.x}vw, ${position.y}vh)`,
+        left: isMobile ? 'auto' : '0',
+        top: isMobile ? 'auto' : '0'
+      }}
       onMouseDown={handleMouseDown}
     >
+      {/* Rest of the card content remains the same */}
       <div className="flex space-x-1 mb-3">
         <div className="w-3 h-3 rounded-full bg-red-400"></div>
         <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
@@ -71,7 +94,6 @@ export default function DraggableCard({
 
       <div className="border-t-4 border-black">
         <Link href={link} target="_blank" onClick={handleClick} className="block">
-          {/* Title with card-hover triggered animation */}
           <h3 className="relative w-full font-bold tracking-tight text-[#404040] my-[1vh]"
               style={{fontSize:"clamp(0.3rem, 2vw, 1.9rem)"}}>
             <span className="relative">
@@ -85,7 +107,7 @@ export default function DraggableCard({
             </span>
           </h3>
           
-          <p className="text-gray-700 "
+          <p className="text-gray-700"
               style={{fontSize:"clamp(0.01rem, 2vw, 0.9rem)"}}>
             {description}
           </p>
