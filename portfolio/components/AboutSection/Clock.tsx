@@ -24,8 +24,8 @@ export default function Clock() {
   const tooltipBgMap: Record<TimeOfDay, string> = {
   morning: "bg-[#c2b97f]",
   afternoon: "bg-[#c2b97f]",
-  evening: "bg-[#c2b97f]",
-  night: "bg-[#6c577e]",
+  evening: "bg-[#774069]",
+  night: "bg-[#774069]",
 };
 
 
@@ -68,7 +68,6 @@ export default function Clock() {
     draggingHand.current = hand;
     startAngle.current = currentAngle;
     previousHour12.current = Math.floor(hourAngle / 30) % 12 || 12;
-    setShowTooltip(false);
   };
 
   const handleMouseMove = (e: MouseEvent) => {
@@ -127,50 +126,72 @@ export default function Clock() {
   }, [hourAngle, isPM]);
 
   return (
-    <>
-      {showTooltip && (
-  <div className="fixed z-[999] left-[10vw] top-[calc(13vh-4.2rem)] w-[15vw] text-center animate-bounce-fade">
-    <div className={`relative ${tooltipBgMap[timeOfDay]} text-black text-xs md:text-sm px-3 py-2 rounded-lg shadow-lg`}>
-      🕰 "Spin the hour hand of the clock to get a peek into how I spend my day."
-      <div
-        className="absolute left-1/2 -bottom-2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent"
-        style={{
-          borderTopColor: timeOfDay === "night" ? "#6c577e" : "#c2b97f",
-        }}
-      ></div>
-    </div>
-  </div>
-)}
-
-    <div
-      ref={clockRef}
-      className={`fixed top-[15vh] left-[10vw] z-50 w-[150vw] max-w-[15vw] aspect-square rounded-full border-[0.7vw] shadow-md flex items-center justify-center
-      ${timeOfDay === 'evening' || timeOfDay === 'night' ? 'bg-gray-700 border-gray-400' : 'bg-stone-200 border-gray-800'}`}
+    <div 
+      className="relative flex flex-col items-center"
+      style={{
+        width: '20vw',
+        height: '30vh',
+        marginTop: '7vh',
+        marginLeft: '5vw'
+      }}
     >
-      <div className="absolute w-[1vw] h-[1vw] bg-black rounded-full z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+      {/* Tooltip positioned above clock in flex column */}
+      {showTooltip && (
+        <div className="w-[min(18vw,220px)] mb-4 animate-bounce-fade">
+          <div className={`relative ${tooltipBgMap[timeOfDay]} text-black p-3 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] border-2 border-black`}
+            style={{
+              fontSize: "clamp(0.65rem, 1.1vw, 0.85rem)",
+              fontFamily: "Comic Sans MS, cursive",
+              transform: "rotate(-2deg)"
+            }}
+          >
+            <span className="absolute -top-3 -left-3 text-2xl">💬</span>
+            <p className="pl-4">"Spin the hour hand to see my daily routine!"</p>
+            <div className="absolute left-6 -bottom-3 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent"
+              style={{ borderTopColor: (timeOfDay === "night" || timeOfDay === "evening") ? "#774069" : "#c2b97f" }}
+            ></div>
+          </div>
+        </div>
+      )}
 
+      {/* Clock container */}     
       <div
-        className={`absolute text-center w-full top-[70%] left-0 text-[1.3vw] font-medium
-        ${timeOfDay === 'evening' || timeOfDay === 'night' ? 'text-white' : 'text-gray-700'}`}
+        ref={clockRef}
+        className={`relative z-60 w-full max-w-[15vw] aspect-square rounded-full border-[0.7vw] shadow-md flex items-center justify-center ${
+          timeOfDay === 'evening' || timeOfDay === 'night' 
+            ? 'bg-gray-700 border-gray-400' 
+            : 'bg-stone-200 border-gray-800'
+        }`}
       >
-        {displayTime}
+        {/* Clock center dot */}
+        <div className="absolute w-[1vw] h-[1vw] bg-black rounded-full z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+
+        {/* Time display */}
+        <div className={`absolute text-center w-full top-[70%] left-0 text-[1.3vw] font-medium ${
+          timeOfDay === 'evening' || timeOfDay === 'night' 
+            ? 'text-white' 
+            : 'text-gray-700'
+        }`}>
+          {displayTime}
+        </div>
+
+        {/* Hour hand */}
+        <div
+          className="absolute w-[.5vw] h-[30%] bg-black origin-bottom rounded-sm z-30 top-1/2 left-1/2 cursor-pointer"
+          style={{
+            transform: `translate(-50%, -100%) rotate(${hourAngle}deg)`
+          }}
+          onMouseDown={() => handleMouseDown('hour', hourAngle)}
+        />
+
+        {/* Minute hand */}
+        <div
+          className="absolute w-[0.3vw] h-[42%] bg-blue-500 origin-bottom rounded-sm z-20 top-1/2 left-1/2"
+          style={{
+            transform: `translate(-50%, -100%) rotate(${minuteAngle}deg)`
+          }}
+        />
       </div>
-
-      <div
-        className="absolute w-[.5vw] h-[30%] bg-black origin-bottom rounded-sm z-30 top-1/2 left-1/2 cursor-pointer"
-        style={{
-          transform: `translate(-50%, -100%) rotate(${hourAngle}deg)`
-        }}
-        onMouseDown={() => handleMouseDown('hour', hourAngle)}
-      />
-
-      <div
-        className="absolute w-[0.3vw] h-[42%] bg-blue-500 origin-bottom rounded-sm z-20 top-1/2 left-1/2"
-        style={{
-          transform: `translate(-50%, -100%) rotate(${minuteAngle}deg)`
-        }}
-      />
     </div>
-    </>
   );
 }

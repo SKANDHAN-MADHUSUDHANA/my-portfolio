@@ -1,17 +1,25 @@
 import Image from "next/image";
-import Clock from "@/components/Clock";
-import TimeScene from "@/components/TimeScene";
-import BackgroundSplit from "@/components/BackgroundSplit";
-import IntroText from "@/components/IntroText";
+import Clock from "@/components/AboutSection/Clock";
+import TimeScene from "@/components/AboutSection/TimeScene";
+import BackgroundSplit from "@/components/AboutSection/BackgroundSplit";
+import IntroText from "@/components/AboutSection/IntroText";
+import ProjectsSection from "@/components/Projects/ProjectsSection";
 
 export default function Home(){
   return(
-    <BackgroundSplit>
-    <main className="flex flex-col items-center justify-center min-h-screen p-6">
-      <Clock />
-      <TimeScene />
-      <IntroText />
+  <main className="relative">
+      {/* First Section with BackgroundSplit */}
+      <section className="h-screen relative overflow-hidden">
+        <BackgroundSplit />
+        <div className="relative z-10 h-full w-full">
+          <Clock />
+          <TimeScene />
+          <IntroText />
+        </div>
+      </section>
+
+      {/* Projects Section */}
+      <ProjectsSection />
     </main>
-    </BackgroundSplit>
   )
 }

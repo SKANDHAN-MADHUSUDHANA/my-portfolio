@@ -1,0 +1,15 @@
+@font-face {
+  font-family: 'Mosk';
+  src: url('/fonts/Mosk-Regular.woff2') format('woff2'),
+       url('/fonts/Mosk-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Mosk';
+  src: url('/fonts/Mosk-Bold.woff2') format('woff2'),
+       url('/fonts/Mosk-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
