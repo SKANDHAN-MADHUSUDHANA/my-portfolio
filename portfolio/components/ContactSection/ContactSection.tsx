@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { useClock } from '@/context/ClockContext';
-import { time } from 'console';
 
 export default function ContactSection() {
     const {timeOfDay} = useClock();
@@ -29,8 +28,8 @@ export default function ContactSection() {
             or give me a shout on social media.
           </p>
           <div className="flex justify-center gap-4 text-[clamp(1.5rem,2.5vw,2rem)] ">
-            <a href="#"><FaGithub /></a>
-            <a href="#"><FaLinkedin /></a>
+            <a href="https://github.com/SKANDHAN-MADHUSUDHANA" target='_blank'><FaGithub /></a>
+            <a href="https://www.linkedin.com/in/skandhan-madhusudhana-75a82b193/" target='_blank'><FaLinkedin /></a>
           </div>
         </div>
 

@@ -6,6 +6,7 @@ import IntroText from "@/components/AboutSection/IntroText";
 import ProjectsSection from "@/components/ProjectsSection/ProjectsSection";
 import MobileThemeToggle from "@/components/AboutSection/MobileThemeToggle";
 import ContactSection from "@/components/ContactSection/ContactSection";
+import TerminalSection from "@/components/AboutMeSection/TerminalSection";
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
       </section>
 
       {/* Projects Section */}
+      <TerminalSection />
       <ProjectsSection />
       <ContactSection />
     </main>
