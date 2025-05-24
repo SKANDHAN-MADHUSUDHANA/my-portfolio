@@ -1,12 +1,8 @@
-"use client"
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ClockProvider , useClock } from "@/context/ClockContext";
-import { useEffect } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
-
-
+import { Geist, Geist_Mono } from "next/font/google";
+import { ClockProvider } from "@/context/ClockContext";
+import { Suspense } from "react";
+import ScrollRestoration from "@/components/ScrollRestoration"; // create this component
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,32 +14,21 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    // Scroll to top on initial load if no hash is present
-    if (!window.location.hash) {
-      window.scrollTo(0, 0);
-    }
-  }, [pathname, searchParams]);
-
   return (
     <html lang="en">
       <body>
         <ClockProvider>
+          <Suspense fallback={null}>
+            <ScrollRestoration />
+          </Suspense>
           {children}
         </ClockProvider>
       </body>
     </html>
   );
 }
-
-

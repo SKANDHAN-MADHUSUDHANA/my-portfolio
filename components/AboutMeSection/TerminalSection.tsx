@@ -10,22 +10,14 @@ const commandResponses: Record<string, string> = {
 
   education: "B.S. in Computer Science from University XYZ. 2020–2024. Learned lots, broke some things, fixed more.",
   experience: `🛠 Experience:
-
-- Software Engineer @  (Summer 2024)
-  Built animated components using React and Tailwind
-  Improved page performance by 32% with code splitting and memoization
-
-- Freelance Web Developer (2022–Present)
-  Delivered custom portfolio sites and dashboards for 10+ clients
-  Designed UI/UX and implemented responsive, accessible layouts
+- Software Engineer 
 
 Want the full résumé? Just ask 😉`,
   skills: `💡 Tech Stack:
   Languages: - Java, C, C++, Python, JavaScript, TypeScript, Python.
   Frontend: -HTML, CSS, React, Next.js, Tailwind CSS, GSAP, Figma.
   Backend: - SpringBoot, Node.js, MongoDB, MySQL.
-  Tools: - Git, GitHub, JIRA, Docker, Kubernates, Postman, Vercel.
-  Bonus: - Quick with Chrome DevTools and bad puns 😄`,
+  Tools: - Git, GitHub, JIRA, Docker, Kubernates, Postman, Vercel.`,
 
   help: "Available commands: cd aboutme, cd education, cd experience, cd skills, clear",
   welcome: "Welcome to my interactive terminal! Type commands to learn more about me."
