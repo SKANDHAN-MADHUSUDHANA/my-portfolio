@@ -9,27 +9,36 @@ import ContactSection from "@/components/ContactSection/ContactSection";
 import TerminalSection from "@/components/AboutMeSection/TerminalSection";
 
 export default function Home() {
-  return (
+   return (
     <main className="relative">
       <MobileThemeToggle />
-      {/* First Section with BackgroundSplit */}
-      <section className="h-screen relative overflow-hidden">
+      
+      {/* Hero Section (First Section) */}
+      <section id="home" className="h-screen relative overflow-hidden">
         <BackgroundSplit />
         <div className="relative z-10 h-full w-full">
-          {/* Hide clock and time scene on mobile */}
           <div className="hidden md:block">
             <Clock />
             <TimeScene />
           </div>
-          {/* Always show intro text */}
           <IntroText />
         </div>
       </section>
 
+      {/* About Me (Terminal) Section */}
+      <section id="about">
+        <TerminalSection />
+      </section>
+
       {/* Projects Section */}
-      <TerminalSection />
-      <ProjectsSection />
-      <ContactSection />
+      <section id="projects">
+        <ProjectsSection />
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact">
+        <ContactSection />
+      </section>
     </main>
   );
 }
