@@ -9,6 +9,17 @@ export default function ContactSection() {
 
   return (
     <section className= {` ${(timeOfDay === "morning" || timeOfDay === "afternoon" ? "bg-teal-300" : "bg-[#774069]")} py-20 px-6 flex justify-center items-center min-h-screen relative overflow-hidden`} >
+      {/* "Hey there!" Label */}
+<h1
+  className="absolute text-[clamp(2rem,6vw,5rem)] font-extrabold text-[#333] z-30 left-[35vw] md:left-[35vw]"
+  style={{
+    top: '15.5vh',
+    transform: 'translate(-50%, -50%)'
+  }}
+>
+  Hey there!
+</h1>
+
       <div className=   {`${(timeOfDay === "morning" || timeOfDay === "afternoon" ? "bg-white , text-gray-800" : "bg-black , text-white")} w-[75vw] h-[70vh] rounded-xl shadow-md flex flex-col md:flex-row items-center p-8 relative z-10`}  >
         
         {/* Left side: Text */}
@@ -34,7 +45,7 @@ export default function ContactSection() {
         </div>
 
         {/* Right side: Avatar tearing through */}
-        <div className="flex-1 flex justify-center mt-12 md:mt-0 relative z-20">
+        <div className="flex-1 flex justify-center mt-2 md:mt-0 relative z-20">
           <div className="relative w-[60vw] h-[30vh] sm:w-[40vw] sm:h-[30vh] md:w-[30vw] md:h-[40vh]">
             <Image
               src={`${timeOfDay === "morning" || timeOfDay === "afternoon" ? "/morningTear.svg" : "/nightTear.svg"}`}
