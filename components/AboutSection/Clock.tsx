@@ -112,6 +112,50 @@ export default function Clock() {
     });
   };
 
+  const handleTouchMove = (e: TouchEvent) => {
+  if (!draggingHand.current || !clockRef.current) return;
+
+  const touch = e.touches[0];
+  const rect = clockRef.current.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const dx = touch.clientX - cx;
+  const dy = touch.clientY - cy;
+  let angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+  if (angle < 0) angle += 360;
+
+  const currentHour12 = Math.floor(angle / 30) % 12 || 12;
+  let updatedIsPM = isPM;
+
+  if ((previousHour12.current === 12 && currentHour12 === 11) ||
+      (previousHour12.current === 11 && currentHour12 === 12)) {
+    updatedIsPM = !isPM;
+  }
+
+  previousHour12.current = currentHour12;
+
+  const minuteFromHour = (angle / 30) * 60;
+  const newMinuteAngle = (minuteFromHour % 60) * 6;
+  const displayHours = currentHour12;
+  const minutes = Math.floor((newMinuteAngle % 360) / 6);
+  const displayTime = `${displayHours}:${minutes.toString().padStart(2, '0')} ${updatedIsPM ? 'PM' : 'AM'}`;
+
+  const hours24 = currentHour12 % 12 + (updatedIsPM ? 12 : 0);
+  let newTimeOfDay: TimeOfDay = 'morning';
+  if (hours24 >= 12 && hours24 < 17) newTimeOfDay = 'afternoon';
+  else if (hours24 >= 17 && hours24 < 21) newTimeOfDay = 'evening';
+  else if (hours24 >= 21 || hours24 < 5) newTimeOfDay = 'night';
+
+  setClockState({
+    hourAngle: angle,
+    minuteAngle: newMinuteAngle,
+    isPM: updatedIsPM,
+    displayTime,
+    timeOfDay: newTimeOfDay,
+  });
+};
+
+
   const handleMouseUp = () => {
     draggingHand.current = null;
   };
@@ -119,9 +163,13 @@ export default function Clock() {
   useEffect(() => {
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("touchmove", handleTouchMove);
+    window.addEventListener("touchend", handleMouseUp);
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleMouseUp);
     };
   }, [hourAngle, isPM]);
 
@@ -167,7 +215,7 @@ export default function Clock() {
         <div className="absolute w-[1vw] h-[1vw] bg-black rounded-full z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
 
         {/* Time display */}
-        <div className={`absolute text-center w-full top-[70%] left-0 text-[1.3vw] font-medium ${
+        <div className={`absolute text-center w-full top-[70%] left-0 text-[1.3vw] font-medium  pointer-events-none select-none ${
           timeOfDay === 'evening' || timeOfDay === 'night' 
             ? 'text-white' 
             : 'text-gray-700'
@@ -182,6 +230,7 @@ export default function Clock() {
             transform: `translate(-50%, -100%) rotate(${hourAngle}deg)`
           }}
           onMouseDown={() => handleMouseDown('hour', hourAngle)}
+          onTouchStart={() => handleMouseDown('hour', hourAngle)}
         />
 
         {/* Minute hand */}
