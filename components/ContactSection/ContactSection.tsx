@@ -27,13 +27,12 @@ export default function ContactSection() {
           <h2 className="text-[clamp(1.8rem,4vw,2.8rem)] font-bold  mb-4">
             I’m always up for a chat.
           </h2>
-          <p className="mb-2 text-[clamp(1rem,2vw,1.25rem)] ">
+          <p className="mb-2 text-[clamp(1rem,2vw,1.25rem)] "> send me an email at {' '}
             <span className={`${timeOfDay === "morning" || timeOfDay === "afternoon" ? "decoration-teal-400" : "decoration-[#DD00A5]"} font-semibold underline underline-offset-2 `}>
-              send me an email
-            </span>{' '}
-            at <a href="mailto:madhusudhana.s@northeastern.edu" className="">
-              madhusudhana.s@northeastern.edu
+              <a href="mailto:madhusudhana.s@northeastern.edu" className="">
+               madhusudhana.s@northeastern.edu
             </a>
+            </span>
           </p>
           <p className="text-[clamp(1rem,2vw,1.25rem)]  mb-4">
             or give me a shout on social media.

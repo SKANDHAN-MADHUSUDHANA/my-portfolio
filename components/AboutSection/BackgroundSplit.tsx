@@ -10,7 +10,7 @@ export default function BackgroundSplit() {
   const leftBg = {
     morning: "bg-white",
     afternoon: "bg-white",
-    evening: "bg-[#dadada]",
+    evening: "bg-black",
     night: "bg-black",
   }[timeOfDay];
 
@@ -18,7 +18,7 @@ export default function BackgroundSplit() {
   const rightBg = {
     morning: "bg-[#c2b97f]",
     afternoon: "bg-[#c2b97f]",
-    evening: "bg-[#6c577e]",
+    evening: "bg-[#774069]",
     night: "bg-[#774069]",
   }[timeOfDay];
 
