@@ -11,7 +11,7 @@ export default function ContactSection() {
     <section className= {` ${(timeOfDay === "morning" || timeOfDay === "afternoon" ? "bg-teal-300" : "bg-[#774069]")} py-20 px-6 flex justify-center items-center min-h-screen relative overflow-hidden`} >
       {/* "Hey there!" Label */}
 <h1
-  className="absolute text-[clamp(2rem,6vw,5rem)] font-extrabold text-[#333] z-30 left-[35vw] md:left-[35vw]"
+  className= {`absolute text-[clamp(2rem,6vw,5rem)] font-extrabold  z-30 left-[35vw] md:left-[35vw] ${timeOfDay === "morning" || timeOfDay === "afternoon" ? "text-black" : "text-white"}`}
   style={{
     top: '15.5vh',
     transform: 'translate(-50%, -50%)'
