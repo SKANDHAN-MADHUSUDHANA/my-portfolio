@@ -7,11 +7,13 @@ import ProjectsSection from "@/components/ProjectsSection/ProjectsSection";
 import MobileThemeToggle from "@/components/AboutSection/MobileThemeToggle";
 import ContactSection from "@/components/ContactSection/ContactSection";
 import TerminalSection from "@/components/AboutMeSection/TerminalSection";
+import NavigationBar from "@/components/AboutSection/NavigationBar";
 
 export default function Home() {
    return (
     <main className="relative">
       <MobileThemeToggle />
+      <NavigationBar />
       
       {/* Hero Section (First Section) */}
       <section id="home" className="h-screen relative overflow-hidden">

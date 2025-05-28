@@ -22,7 +22,7 @@ export default function TimeScene() {
       <div className="w-full h-[7vh] flex items-center justify-center z-50">
         <h1
           className={`t font-extrabold tracking-wider drop-shadow-lg animate-fade-in
-            ${timeOfDay === "night" ? "text-white" : "text-black"}`}
+            ${timeOfDay === "night" || timeOfDay === "evening" ? "text-white" : "text-black"}`}
             style={{ fontSize: "clamp(1rem, 2.5vw, 3rem)" }}
         >
           {overlayTextMap[timeOfDay]}
